@@ -1,28 +1,12 @@
-Reproducible Research - Peer Assesment 1
-========================================================
+---
+title: "Reproducible Research: Peer Assessment 1"
+output: 
+  html_document:
+    keep_md: true
+---
 #### *by Mauricio G. Melara Camargo*
 
-### Introduction
-
-It is now possible to collect a large amount of data about personal movement using activity monitoring devices such as a Fitbit, Nike Fuelband, or Jawbone Up. These type of devices are part of the “quantified self” movement – a group of enthusiasts who take measurements about themselves regularly to improve their health, to find patterns in their behavior, or because they are tech geeks. But these data remain under-utilized both because the raw data are hard to obtain and there is a lack of statistical methods and software for processing and interpreting the data.
-
-This assignment makes use of data from a personal activity monitoring device. This device collects data at 5 minute intervals through out the day. The data consists of two months of data from an anonymous individual collected during the months of October and November, 2012 and include the number of steps taken in 5 minute intervals each day.
-
-### Data
-
-The data for this assignment can be downloaded from the course web site:
-
-Dataset: [Activity monitoring data] (https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip) [52K]
-
-The variables included in this dataset are:
-
-**steps**: Number of steps taking in a 5-minute interval (missing values are coded as NA)
-
-**date**: The date on which the measurement was taken in YYYY-MM-DD format
-
-**interval**: Identifier for the 5-minute interval in which measurement was taken
-
-### Loading and preprocessing the data
+## Loading and preprocessing the data
 
 ```r
 data = read.csv("~/work/Coursera/Reproducible_Research/RepData_PeerAssessment1/activity.csv", 
@@ -51,8 +35,7 @@ data[2] = as.Date(data[[2]])
 ```
 
 
-
-### What is mean total number of steps taken per day?
+## What is mean total number of steps taken per day?
 
 ```r
 library(reshape2)
@@ -103,7 +86,8 @@ median(stepsPerDay[[2]])
 ```
 
 
-### What is the average daily activity pattern?
+
+## What is the average daily activity pattern?
 
 ```r
 meltData <- melt(data, id = c("interval"), measure.vars = c("steps"))
@@ -130,7 +114,7 @@ avgStepsPerInterval[maxIndex, 1]
 
 That is, at 8:35 AM there is the maximum mean number of steps.
 
-### Imputing missing values
+## Imputing missing values
 To calculate the number of input lines with NA values
 
 
@@ -215,7 +199,8 @@ By comparing these values to the mean and median of steps per day, without input
 - Median value had a slight increase (1 step - from 10765 to 10766) and now it has the same value as the mean.
 - The general effect of inputing data using the described strategy can be seen on the histogram. The distribution has a higher peak on the center, which is explained by more entries with the mean value. This will also impact on the variance and standard deviation of this distribution, which will be both reduced.
 
-### Are there differences in activity patterns between weekdays and weekends?
+
+## Are there differences in activity patterns between weekdays and weekends?
 
 
 ```r
@@ -229,11 +214,24 @@ Sys.setlocale("LC_TIME", "C")
 ```
 
 ```r
+
 ## creates a new factor to distinguish weekends from weekdays
 dataMerged$dayLabel <- ifelse(weekdays(dataMerged$date) == "Sunday" | weekdays(dataMerged$date) == 
     "Saturday", "weekend", "weekday")
 
+dataMerged = transform(dataMerged, dayLabel = factor(dayLabel))
+
+meltData <- melt(dataMerged, id = c("dayLabel", "interval"), measure.vars = c("filledSteps"))
+dayTypeAvg <- dcast(meltData, dayLabel + interval ~ variable, mean)
+
+library(lattice)
+xyplot(filledSteps ~ interval | dayLabel, data = dayTypeAvg, layout = c(1, 2), 
+    ylab = "Number of Steps", type = "l", main = "Comparison between Weekend and Weekday Average Steps per Interval")
 ```
 
+![plot of chunk unnamed-chunk-14](figure/unnamed-chunk-14.png) 
+
+
+We can see that there is a clear difference between weekend and weekdays activity pattern. 
 
 
