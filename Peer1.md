@@ -212,6 +212,28 @@ median(stepsPerDay_posFill[[2]])
 
 By comparing these values to the mean and median of steps per day, without inputing missing values, we can see that:
 - Mean value remains the same;
-- Median value had a slight increase (1 step - from 10765 to 10766)
+- Median value had a slight increase (1 step - from 10765 to 10766) and now it has the same value as the mean.
 - The general effect of inputing data using the described strategy can be seen on the histogram. The distribution has a higher peak on the center, which is explained by more entries with the mean value. This will also impact on the variance and standard deviation of this distribution, which will be both reduced.
+
+### Are there differences in activity patterns between weekdays and weekends?
+
+
+```r
+## this command will make week days to be written in English language,
+## instead of my default Portuguese
+Sys.setlocale("LC_TIME", "C")
+```
+
+```
+## [1] "C"
+```
+
+```r
+## creates a new factor to distinguish weekends from weekdays
+dataMerged$dayLabel <- ifelse(weekdays(dataMerged$date) == "Sunday" | weekdays(dataMerged$date) == 
+    "Saturday", "weekend", "weekday")
+
+```
+
+
 

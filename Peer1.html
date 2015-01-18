@@ -356,9 +356,25 @@ hist(stepsPerDay_posFill[[2]], breaks = 20, col = &quot;red&quot;, xlab = &quot;
 
 <ul>
 <li>Mean value remains the same;</li>
-<li>Median value had a slight increase (1 step - from 10765 to 10766)</li>
+<li>Median value had a slight increase (1 step - from 10765 to 10766) and now it has the same value as the mean.</li>
 <li>The general effect of inputing data using the described strategy can be seen on the histogram. The distribution has a higher peak on the center, which is explained by more entries with the mean value. This will also impact on the variance and standard deviation of this distribution, which will be both reduced.</li>
 </ul>
+
+<h3>Are there differences in activity patterns between weekdays and weekends?</h3>
+
+<pre><code class="r">## this command will make week days to be written in English language,
+## instead of my default Portuguese
+Sys.setlocale(&quot;LC_TIME&quot;, &quot;C&quot;)
+</code></pre>
+
+<pre><code>## [1] &quot;C&quot;
+</code></pre>
+
+<pre><code class="r">## creates a new factor to distinguish weekends from weekdays
+dataMerged$dayLabel &lt;- ifelse(weekdays(dataMerged$date) == &quot;Sunday&quot; | weekdays(dataMerged$date) == 
+    &quot;Saturday&quot;, &quot;weekend&quot;, &quot;weekday&quot;)
+
+</code></pre>
 
 </body>
 
